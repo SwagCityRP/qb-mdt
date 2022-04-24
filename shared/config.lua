@@ -171,6 +171,7 @@ Config.PenalCode = {
         [35] = {title = 'Desecration of a Human Corpse', class = 'Felony', id = 'P.C. 7035', months = 20, fine = 1500, color = 'orange'},
         [36] = {title = 'Public Intoxication', class = 'Infraction', id = 'P.C. 7036', months = 0, fine = 500, color = 'green'},
         [37] = {title = 'Public Indecency', class = 'Misdemeanor', id = 'P.C. 7037', months = 10, fine = 750, color = 'green'},
+        [38] = {title = 'Giving a Sloppy Toppy to a Suspect in the back of her squad car', class = 'Misdemeanor', id = 'P.C. 7038', months = 10, fine = 750, color = 'green'},
     },
     [8] = {
         [1] = {title = 'Criminal Possession of Weapon Class A', class = 'Felony', id = 'P.C. 8001', months = 10, fine = 500, color = 'green'},
