@@ -47,8 +47,10 @@ RegisterNetEvent('mdt:server:openMDT', function()
 	local JobType = GetJobType(PlayerData.job.name)
 	local bulletin = GetBulletins(JobType)
 
+	local calls = exports['qb-dispatch']:GetDispatchCalls()
+
 	--TriggerClientEvent('mdt:client:dashboardbulletin', src, bulletin)
-	TriggerClientEvent('mdt:client:open', src, bulletin, activeUnits)
+	TriggerClientEvent('mdt:client:open', src, bulletin, activeUnits, calls)
 	--TriggerClientEvent('mdt:client:GetActiveUnits', src, activeUnits)
 end)
 
@@ -59,7 +61,7 @@ QBCore.Functions.CreateCallback('mdt:server:SearchProfile', function(source, cb,
 	if Player then
 		local JobType = GetJobType(Player.PlayerData.job.name)
 		if JobType ~= nil then
-			local people = MySQL.query.await("SELECT p.citizenid, p.charinfo, md.pfp FROM players p LEFT JOIN mdt_data md on p.citizenid = md.cid WHERE LOWER(`charinfo`) LIKE :query OR LOWER(`citizenid`) LIKE :query OR LOWER(`fingerprint`) LIKE :query AND jobtype = :jobtype LIMIT 20", { query = string.lower('%'..sentData..'%'), jobtype = JobType })
+			local people = MySQL.query.await("SELECT p.citizenid, p.charinfo, md.pfp FROM players p LEFT JOIN mdt_data md on p.citizenid = md.cid WHERE LOWER(CONCAT(JSON_VALUE(p.charinfo, '$.firstname'), ' ', JSON_VALUE(p.charinfo, '$.lastname'))) LIKE :query OR LOWER(`charinfo`) LIKE :query OR LOWER(`citizenid`) LIKE :query OR LOWER(`fingerprint`) LIKE :query AND jobtype = :jobtype LIMIT 20", { query = string.lower('%'..sentData..'%'), jobtype = JobType })
 			local citizenIds = {}
 			local citizenIdIndexMap = {}
 			if not next(people) then cb({}) return end
@@ -236,6 +238,12 @@ QBCore.Functions.CreateCallback('mdt:server:GetProfileData', function(source, cb
 		person.profilepic = mdtData.pfp
 		person.tags = json.decode(mdtData.tags)
 		person.gallery = json.decode(mdtData.gallery)
+	end
+
+	local mdtData2 = GetPfpFingerPrintInformation(sentId)
+	if mdtData2 then
+		person.fingerprint = mdtData2.fingerprint
+		person.profilepic = mdtData.pfp
 	end
 
 	return cb(person)

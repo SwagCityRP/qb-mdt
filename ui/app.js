@@ -3868,7 +3868,7 @@ $(document).ready(() => {
         let radio = unit.radio ? unit.radio : "0";
         let callSign = unit.callSign ? unit.callSign : "000";
         let activeInfoJob = `<div class="unit-job active-info-job-unk">UNKNOWN</div>`;
-        if (PoliceJobs[playerJob] !== undefined) {
+        if (PoliceJobs[unit.unitType] !== undefined) {
           policeCount++;
           activeInfoJob = `<div class="unit-job active-info-job-lspd">LSPD</div>`;
         } else if (AmbulanceJobs[unit.unitType] !== undefined) {
@@ -4083,7 +4083,11 @@ $(document).ready(() => {
         if (value["doorCount"]) {
           DispatchItem += `<div class="call-bottom-info"><span class="fas fa-door-open"></span>${value.doorCount}</div>`;
         }
-
+        
+        if (value["speed"]) {
+          DispatchItem += `<div class="call-bottom-info"><span class="fas fa-arrow-right"></span>${value.speed}</div>`;
+        }
+        
         if (value["weapon"]) {
           DispatchItem += `<div class="call-bottom-info"><span class="fas fa-bullseye"></span>${value.weapon}</div>`;
         }
